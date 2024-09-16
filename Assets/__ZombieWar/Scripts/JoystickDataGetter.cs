@@ -11,9 +11,9 @@ public class JoystickDataGetter : MonoBehaviour
     {
         if (joystickDataSO == null)
         {
-            joystickDataSO.CurrentDirection = Vector2.zero;
+            joystickDataSO.Value = Vector2.zero;
             return;
         }
-        joystickDataSO.CurrentDirection = joystick.Direction;
+        joystickDataSO.Value = joystick.Direction;
     }
 }

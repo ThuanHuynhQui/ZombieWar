@@ -14,6 +14,8 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] protected float velocity;
     [HideInInspector] public Vector3 MoveDirection;
 
+    public float Speed => speed;
+
     private void Update()
     {
         UpdateAnimatorVelocity();
@@ -36,7 +38,7 @@ public class CharacterMovement : MonoBehaviour
     //Apply velocity forward
     void MoveForward()
     {
-        rb.velocity = MoveDirection.magnitude * speed * transform.forward;
+        rb.velocity = MoveDirection.normalized.magnitude * speed * transform.forward;
     }
 
     void UpdateAnimatorVelocity()

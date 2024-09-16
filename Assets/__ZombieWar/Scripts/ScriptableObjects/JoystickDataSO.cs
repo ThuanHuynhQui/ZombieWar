@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "JoystickDataSO", menuName = "ZombieWar/ScriptableObject/JoystickDataSO")]
-public class JoystickDataSO : ScriptableObject
+public class JoystickDataSO : Vector2VariableSO
 {
-    public Vector2 CurrentDirection = new Vector2();
-    public float Horizontal => CurrentDirection.x;
-    public float Vertical => CurrentDirection.y;
+    public float Horizontal => Value.x;
+    public float Vertical => Value.y;
 }

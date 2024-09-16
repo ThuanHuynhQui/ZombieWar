@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Vector3 moveDir = new Vector3(joystickDataSO.CurrentDirection.x, 0, joystickDataSO.CurrentDirection.y);
+        Vector3 moveDir = new Vector3(joystickDataSO.Horizontal, 0, joystickDataSO.Vertical);
         characterMovement.MoveDirection = moveDir;
     }
 }
