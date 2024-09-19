@@ -7,21 +7,29 @@ public class WeaponSO : ScriptableObject
 {
     [Header("Tweak")]
     [SerializeField] protected float weaponDamage;
-    [SerializeField] protected int ammoEachMagazine;
     [SerializeField] protected float projectileSpeed;
     [SerializeField] protected float fireRate;
+    [SerializeField] protected float weaponRange = 5;
+    [SerializeField] protected WeaponType weaponType;
     [Space]
     [Header("References")]
-    [SerializeField] protected Animator animator;
-    [SerializeField] protected BaseWeapon weaponPrefab;
-    [SerializeField] protected GameObject projectilePrefab;
+    [SerializeField] protected Weapon weaponPrefab;
+    [SerializeField] protected Projectile projectilePrefab;
+    [SerializeField] protected ParticleSystem hitParticlePrefab;
 
     public float WeaponDamage => weaponDamage;
-    public int AmmoEachMagazine => ammoEachMagazine;
     public float ProjectileSpeed => projectileSpeed;
     public float FireRate => fireRate;
+    public float WeaponRange => weaponRange;
+    public WeaponType WeaponType => weaponType;
+    public Weapon WeaponPrefab => weaponPrefab;
+    public Projectile ProjectilePrefab => projectilePrefab;
+    public ParticleSystem HitParticlePrefab => hitParticlePrefab;
+}
 
-    public Animator Animator => animator;
-    public BaseWeapon WeaponPrefab => weaponPrefab;
-    public GameObject ProjectilePrefab => projectilePrefab;
+public enum WeaponType
+{
+    Rifle = 0,
+    Pistol = 1,
+    DualPistol = 2
 }

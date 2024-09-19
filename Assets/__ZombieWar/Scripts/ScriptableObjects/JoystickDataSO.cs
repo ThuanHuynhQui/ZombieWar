@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "JoystickDataSO", menuName = "ZombieWar/ScriptableObject/JoystickDataSO")]
+[CreateAssetMenu(fileName = "JoystickDataSO", menuName = "ZombieWar/ScriptableObjects/JoystickDataSO")]
 public class JoystickDataSO : Vector2VariableSO
 {
     public float Horizontal => Value.x;

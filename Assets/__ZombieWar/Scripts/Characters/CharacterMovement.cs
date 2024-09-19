@@ -10,8 +10,6 @@ public class CharacterMovement : MonoBehaviour
     [Header("References")]
     [SerializeField] protected Rigidbody rb;
     [SerializeField] protected Animator animator;
-    [Header("Debug")]
-    [SerializeField] protected float velocity;
     [HideInInspector] public Vector3 MoveDirection;
 
     public float Speed => speed;

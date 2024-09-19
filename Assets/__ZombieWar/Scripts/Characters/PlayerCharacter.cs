@@ -5,19 +5,34 @@ using UnityEngine.Animations.Rigging;
 
 public class PlayerCharacter : Character
 {
+    [SerializeField] List<Rig> rigs;
     [SerializeField] Transform aimingTransform;
-    [SerializeField] Rig rig;
+    [SerializeField] FloatVariableSO playerHealthSO;
     [SerializeField] LayerMask overlapSphereDetectLayer;
     [SerializeField] LayerMask raycastDetectLayer;
-    private float DetectionRange => 5;
-    private Character currentTarget;
-    private float aimingHeight => aimingTransform ? aimingTransform.position.y : 0;
+
+    protected float DetectionRange => CurrentWeaponSO ? currentWeaponSO.WeaponRange : 0;
+    protected float aimingHeight => aimingTransform ? aimingTransform.position.y : 0;
+    protected Character currentTarget;
     public override Character CurrentTarget => currentTarget;
+    protected override float CurrentHealth
+    {
+        get => playerHealthSO ? playerHealthSO.Value : 0;
+        set
+        {
+            if (!playerHealthSO) return;
+            playerHealthSO.Value = Mathf.Max(value, 0);
+            if (playerHealthSO.Value <= 0) Die();
+        }
+    }
+    protected Rig CurrentRig => CurrentWeaponSO ? rigs[(int)CurrentWeaponSO.WeaponType] : null;
 
     // Update is called once per frame
     private void Update()
     {
         UpdateRig();
+        UpdateAnimator();
+        AttackTarget();
     }
 
     void FixedUpdate()
@@ -37,18 +52,25 @@ public class PlayerCharacter : Character
     void AttackTarget()
     {
         if (CurrentTarget == null) return;
-
-    }
-
-    void AttachWeapon()
-    {
-
+        if (currentWeaponInstances.Count == 0) return;
+        var weapon = currentWeaponInstances[usingWeaponIndex % currentWeaponInstances.Count];
+        if (weapon.IsAttackable)
+        {
+            weapon.Attack();
+            usingWeaponIndex++;
+        }
     }
 
     void UpdateRig()
     {
-        if (!rig) return;
-        rig.weight = CurrentTarget ? 1 : 0;
+        if (!CurrentRig) return;
+        CurrentRig.weight = CurrentTarget ? 1 : 0;
+    }
+
+    void UpdateAnimator()
+    {
+        if (!animator) return;
+        animator.SetBool("IsCombat", CurrentTarget);
     }
 
     void DetectTargetInRange()
@@ -112,6 +134,36 @@ public class PlayerCharacter : Character
                 }
             }
             return null; //Could not find any attackable enemy.
+        }
+    }
+
+    public override void Hit(float damage)
+    {
+        CurrentHealth -= damage;
+        base.Hit(damage);
+    }
+
+    protected override void SwitchWeapon()
+    {
+        base.SwitchWeapon();
+        UpdateAnimatorWeight();
+        UpdateRigWeight();
+    }
+
+    void UpdateAnimatorWeight()
+    {
+        if (!animator) return;
+        for (int i = 1; i < animator.layerCount; i++)
+        {
+            animator.SetLayerWeight(i, (int)CurrentWeaponSO.WeaponType + 1 == i ? 1 : 0);
+        }
+    }
+
+    void UpdateRigWeight()
+    {
+        for (int i = 0; i < rigs.Count; i++)
+        {
+            rigs[i].weight = CurrentWeaponSO && (int)CurrentWeaponSO.WeaponType == i ? 1 : 0;
         }
     }
 
