@@ -8,6 +8,7 @@ public class Weapon : MonoBehaviour
     protected const string TriggerActionStr = "LaunchProjectile";
     public event Action OnWeaponUsed = delegate { };
     [SerializeField] protected Transform launchPosition;
+    [SerializeField] protected AudioSource audioSource;
 
     #region Variables
     protected float lastUsedTime;
@@ -171,6 +172,7 @@ public class Weapon : MonoBehaviour
         projectile.gameObject.SetActive(true);
         projectile.transform.SetPositionAndRotation(launchPosition.position, launchPosition.rotation);
         projectile.Launch(direction, projectileSpeed);
+        audioSource.PlayOneShot(audioSource.clip);
         OnWeaponUsed?.Invoke();
     }
 
