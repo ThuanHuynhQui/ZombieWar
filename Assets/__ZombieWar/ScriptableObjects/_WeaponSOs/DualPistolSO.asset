@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a3aeecb7e7f55947b1748afd51cba5d, type: 3}
+  m_Name: DualPistolSO
+  m_EditorClassIdentifier: 
+  weaponDamage: 8
+  projectileSpeed: 20
+  fireRate: 0.5
+  weaponRange: 8
+  weaponType: 2
+  weaponPrefab: {fileID: 1497203889755334951, guid: f99fd4be19a87174d8adb4b006e14c94, type: 3}
+  projectilePrefab: {fileID: 3320721448995288349, guid: f6d8bac37cbd88a4986cdcc80b1b4c54, type: 3}
+  hitParticlePrefab: {fileID: 19800002, guid: e74af37e539075d428c1f7bd8cdb781d, type: 3}

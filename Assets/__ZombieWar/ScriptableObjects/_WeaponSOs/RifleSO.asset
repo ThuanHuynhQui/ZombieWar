@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a3aeecb7e7f55947b1748afd51cba5d, type: 3}
   m_Name: RifleSO
   m_EditorClassIdentifier: 
-  weaponDamage: 5
+  weaponDamage: 12
   projectileSpeed: 20
-  fireRate: 0.2
+  fireRate: 0.4
   weaponRange: 10
   weaponType: 0
-  weaponPrefab: {fileID: 2558694303173502648, guid: 6a2aa1d3f84d9f44fbd2aa46b40afc8f, type: 3}
+  weaponPrefab: {fileID: 4549711240154997676, guid: df88a51591dcbf14eb195590a2d88f16, type: 3}
   projectilePrefab: {fileID: 3320721448995288349, guid: f6d8bac37cbd88a4986cdcc80b1b4c54, type: 3}
   hitParticlePrefab: {fileID: 19800002, guid: e74af37e539075d428c1f7bd8cdb781d, type: 3}
