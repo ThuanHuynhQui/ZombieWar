@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a3aeecb7e7f55947b1748afd51cba5d, type: 3}
   m_Name: PistolSO
   m_EditorClassIdentifier: 
-  weaponDamage: 8
+  weaponDamage: 12
   projectileSpeed: 20
   fireRate: 1
   weaponRange: 8

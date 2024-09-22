@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a3aeecb7e7f55947b1748afd51cba5d, type: 3}
   m_Name: GrenadeSO
   m_EditorClassIdentifier: 
-  weaponDamage: 12
+  weaponDamage: 50
   projectileSpeed: 20
   fireRate: 0
   weaponRange: 10
