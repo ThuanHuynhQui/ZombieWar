@@ -39,7 +39,7 @@ public abstract class Character : MonoBehaviour
     [SerializeField] protected RagdollController ragdollController;
     [SerializeField] protected ParticleSystem hitParticlePrefab;
 
-    protected virtual CharacterType characterType => CharacterType.Human;
+    public virtual CharacterType CharacterType => CharacterType.Human;
     protected virtual float CurrentHealth
     {
         get => 0;
@@ -96,9 +96,9 @@ public abstract class Character : MonoBehaviour
     {
         if (isDeath) return;
         isDeath = true;
+        characterMovement.IsStop = true;
         GetComponent<CharacterMovement>().enabled = false;
         Animator.enabled = false;
-        GetComponent<Rigidbody>().isKinematic = true;
         GetComponent<Collider>().enabled = false;
         ragdollController.enabled = true;
         var forceDir = new Vector3(transform.position.x, recentHitData.forcePosition.y, transform.position.z) - recentHitData.forcePosition;
@@ -107,7 +107,7 @@ public abstract class Character : MonoBehaviour
 
         IEnumerator CR_InvokeEvent()
         {
-            yield return new WaitForSeconds(4f);
+            yield return new WaitForSeconds(0.5f);
             OnDeath?.Invoke();
             GameEventHandler.Invoke(CharacterEventCode.OnCharacterDie, this);
         }

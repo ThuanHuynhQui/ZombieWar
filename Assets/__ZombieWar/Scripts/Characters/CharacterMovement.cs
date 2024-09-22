@@ -10,6 +10,8 @@ public class CharacterMovement : MonoBehaviour
     [Header("References")]
     [SerializeField] protected Rigidbody rb;
     [SerializeField] protected Animator animator;
+    [SerializeField] protected bool updatePosition = true;
+    [SerializeField] protected bool updateRotation = true;
     [HideInInspector] public Vector3 MoveDirection;
 
     public float Speed => speed;
@@ -30,6 +32,7 @@ public class CharacterMovement : MonoBehaviour
     //Rotate character to the desired direction.
     void RotateToMoveDirection()
     {
+        if (!updateRotation) return;
         if (MoveDirection == Vector3.zero) return;
         Quaternion targetRotation = Quaternion.LookRotation(MoveDirection.normalized, Vector3.up);
         rb.MoveRotation(targetRotation);
@@ -38,11 +41,12 @@ public class CharacterMovement : MonoBehaviour
     //Apply velocity forward
     void MoveForward()
     {
+        if (!updatePosition) return;
         rb.velocity = MoveDirection.normalized.magnitude * speed * transform.forward;
     }
 
     void UpdateAnimatorVelocity()
     {
-        animator.SetFloat(GlobalConst.AnimatorVelStr, rb.velocity.magnitude);
+        animator.SetFloat(GlobalConst.AnimatorVelStr, MoveDirection.normalized.magnitude);
     }
 }

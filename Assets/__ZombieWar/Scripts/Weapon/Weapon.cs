@@ -81,7 +81,7 @@ public class Weapon : MonoBehaviour
 
     protected void AddProjectileToPool(Projectile projectile)
     {
-        if (!gameObject || projectilePooling == null)
+        if (!this || projectilePooling == null)
         {
             // Objectpool is null, destroy projectile instead!
             Destroy(projectile.gameObject);

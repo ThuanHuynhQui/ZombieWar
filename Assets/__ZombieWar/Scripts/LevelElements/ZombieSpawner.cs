@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Template.Events;
 using UnityEngine;
 
 public class ZombieSpawner : MonoBehaviour
@@ -17,6 +18,16 @@ public class ZombieSpawner : MonoBehaviour
             if (zombiePool == null) InitZombiePooling();
             return zombiePool;
         }
+    }
+
+    private void Awake()
+    {
+        GameEventHandler.AddActionEvent(LevelEventCode.OnLevelEnded, HandleLevelEnded);
+    }
+
+    private void OnDestroy()
+    {
+        GameEventHandler.RemoveActionEvent(LevelEventCode.OnLevelEnded, HandleLevelEnded);
     }
 
     private void Start()
@@ -74,6 +85,7 @@ public class ZombieSpawner : MonoBehaviour
         {
             ZombieCharacter zombie = ZombiePool.Get();
             Vector3 spawnPos = playerPositionSO.Value;
+            spawnPos.y = 1;
             int findTimes = 0;
             while (findTimes <= 10) //Find 10 times only
             {
@@ -93,5 +105,10 @@ public class ZombieSpawner : MonoBehaviour
             int elapsedHalfMinute = (int)(Time.time - startTime) / 30;
             yield return new WaitForSeconds(Mathf.Max(3.5f - elapsedHalfMinute * 0.5f, 0.5f));
         }
+    }
+
+    private void HandleLevelEnded()
+    {
+        isGameOver = true;
     }
 }

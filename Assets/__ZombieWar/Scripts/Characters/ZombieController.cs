@@ -11,8 +11,8 @@ public class ZombieController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        navMeshAgent.updatePosition = false;
-        navMeshAgent.updateRotation = false;
+        // navMeshAgent.updatePosition = false;
+        // navMeshAgent.updateRotation = false;
         navMeshAgent.speed = characterMovement.Speed;
     }
 

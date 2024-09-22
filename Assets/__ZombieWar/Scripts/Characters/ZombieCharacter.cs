@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
 public class ZombieCharacter : Character
 {
     [SerializeField] LayerMask playerLayer;
+    [SerializeField] Renderer modelRenderer;
     float currentHealth = 0;
-    protected override CharacterType characterType => CharacterType.Zombie;
+    public override CharacterType CharacterType => CharacterType.Zombie;
     protected override float CurrentHealth
     {
         get => currentHealth;
@@ -55,12 +57,13 @@ public class ZombieCharacter : Character
     public void ResetToOrgState()
     {
         CurrentHealth = initialHealth;
+        characterMovement.IsStop = false;
         Animator.enabled = true;
-        GetComponent<Rigidbody>().isKinematic = false;
         GetComponent<CharacterMovement>().enabled = true;
         GetComponent<Collider>().enabled = true;
         ragdollController.enabled = false;
         isDeath = false;
+        modelRenderer.material.SetFloat("_Dissolve", 0);
     }
 
     public override void Hit(float damage, HitData hitData)
@@ -68,5 +71,11 @@ public class ZombieCharacter : Character
         SetRecentHitData(hitData);
         CurrentHealth -= damage;
         base.Hit(damage, hitData);
+    }
+
+    public override void Die()
+    {
+        base.Die();
+        modelRenderer.material.DOFloat(1, "_Dissolve", 0.5f);
     }
 }

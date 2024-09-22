@@ -149,7 +149,6 @@ public class PlayerCharacter : Character
         SetRecentHitData(hitData);
         CurrentHealth -= damage;
         base.Hit(damage, hitData);
-        Debug.Log("Player hit " + damage);
     }
 
     protected override void SwitchWeapon()
