@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Template.Events;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
@@ -27,11 +29,19 @@ public class PlayerCharacter : Character
     }
     protected Rig CurrentRig => CurrentWeaponSO ? rigs[(int)CurrentWeaponSO.WeaponType] : null;
 
+    private void Awake()
+    {
+        GameEventHandler.AddActionEvent(PlayerWeaponEventCode.OnRequestWeaponChange, HandleWeaponChanged);
+    }
+
+    private void OnDestroy()
+    {
+        GameEventHandler.RemoveActionEvent(PlayerWeaponEventCode.OnRequestWeaponChange, HandleWeaponChanged);
+    }
+
     // Update is called once per frame
     private void Update()
     {
-        UpdateRig();
-        UpdateAnimator();
         AttackTarget();
     }
 
@@ -43,9 +53,15 @@ public class PlayerCharacter : Character
 
     void AimingAtTarget()
     {
-        if (CurrentTarget == null) return;
-        Vector3 aimDirection = CurrentTarget.transform.position;
-        // aimDirection = aimDirection.normalized;
+        Vector3 aimDirection;
+        if (CurrentTarget != null)
+        {
+            aimDirection = CurrentTarget.transform.position;
+        }
+        else //Look forward when no target
+        {
+            aimDirection = transform.forward.normalized * 10;
+        }
         aimingTransform.position = new Vector3(aimDirection.x, aimingTransform.position.y, aimDirection.z);
     }
 
@@ -56,21 +72,9 @@ public class PlayerCharacter : Character
         var weapon = currentWeaponInstances[usingWeaponIndex % currentWeaponInstances.Count];
         if (weapon.IsAttackable)
         {
-            weapon.Attack();
+            weapon.Attack(currentTarget.transform.position);
             usingWeaponIndex++;
         }
-    }
-
-    void UpdateRig()
-    {
-        if (!CurrentRig) return;
-        CurrentRig.weight = CurrentTarget ? 1 : 0;
-    }
-
-    void UpdateAnimator()
-    {
-        if (!animator) return;
-        animator.SetBool("IsCombat", CurrentTarget);
     }
 
     void DetectTargetInRange()
@@ -148,6 +152,8 @@ public class PlayerCharacter : Character
         base.SwitchWeapon();
         UpdateAnimatorWeight();
         UpdateRigWeight();
+        currentWeaponSOVariable.Value = CurrentWeaponSO;
+        GameEventHandler.Invoke(PlayerWeaponEventCode.OnWeaponChanged, CurrentWeaponSO);
     }
 
     void UpdateAnimatorWeight()
@@ -166,6 +172,15 @@ public class PlayerCharacter : Character
             rigs[i].weight = CurrentWeaponSO && (int)CurrentWeaponSO.WeaponType == i ? 1 : 0;
         }
     }
+
+    private void HandleWeaponChanged(object[] parameters)
+    {
+        if (parameters == null) return;
+        if (parameters.Length == 0) return;
+        if (parameters[0] is not WeaponSO weaponSO) return;
+        CurrentWeaponSO = weaponSO;
+    }
+
 
 #if UNITY_EDITOR
     private void OnDrawGizmosSelected()

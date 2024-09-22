@@ -7,16 +7,23 @@ using UnityEngine;
 public enum CharacterEventCode
 {
     /// <summary>
-    /// Raised when a character is death
+    /// Raised when a character is death.
     /// <para><typeparamref name="Character"/>: Died character</para>
     /// </summary>
     OnCharacterDie,
     /// <summary>
-    /// Raised when a character got hit
+    /// Raised when a character got hit.
     /// <para><typeparamref name="Character"/>: Being hit character</para>
     /// <para><typeparamref name="float"/>: Hit damage</para>
     /// </summary>
     OnCharacterHit,
+}
+
+public enum CharacterType
+{
+    Human,
+    Zombie,
+    BossZombie
 }
 public abstract class Character : MonoBehaviour
 {
@@ -26,9 +33,10 @@ public abstract class Character : MonoBehaviour
     [SerializeField] protected float initialHealth;
     [SerializeField] protected Transform leftHandWeaponContainer;
     [SerializeField] protected Transform rightHandWeaponContainer;
-    [SerializeField] protected WeaponSO defaultWeaponSO;
+    [SerializeField] protected WeaponSOVariable currentWeaponSOVariable;
     [SerializeField] protected Animator animator;
 
+    protected virtual CharacterType characterType => CharacterType.Human;
     protected virtual float CurrentHealth { get; set; }
     public virtual Character CurrentTarget => null;
     protected WeaponSO currentWeaponSO;
@@ -37,8 +45,9 @@ public abstract class Character : MonoBehaviour
         get => currentWeaponSO;
         set
         {
+            if (currentWeaponSO == value) return;
             currentWeaponSO = value;
-            if (currentWeaponSO == null) currentWeaponSO = defaultWeaponSO;
+            if (!currentWeaponSO) currentWeaponSO = currentWeaponSOVariable.Value; //Set default weapon if null
             SwitchWeapon();
         }
     }
@@ -50,10 +59,11 @@ public abstract class Character : MonoBehaviour
     bool isDeath = false;
 
     public bool IsDeath => isDeath;
+    public Animator Animator => animator;
 
     protected virtual void Start()
     {
-        CurrentWeaponSO = defaultWeaponSO;
+        CurrentWeaponSO = currentWeaponSOVariable.Value;
         CurrentHealth = initialHealth;
     }
 
@@ -78,21 +88,17 @@ public abstract class Character : MonoBehaviour
         {
             Destroy(weaponInstance.gameObject);
         }
-
+        currentWeaponInstances.Clear();
         if (CurrentWeaponSO == null) return;
 
         //Attach new weapon
         switch (CurrentWeaponSO.WeaponType)
         {
             case WeaponType.Rifle:
+            case WeaponType.Pistol:
                 Weapon instance = Instantiate(CurrentWeaponSO.WeaponPrefab);
                 instance.OnWeaponUsed += () => instance.UpdateUsedtime(Time.time);
                 AttachWeapon(rightHandWeaponContainer);
-                break;
-            case WeaponType.Pistol:
-                instance = Instantiate(CurrentWeaponSO.WeaponPrefab);
-                instance.OnWeaponUsed += () => instance.UpdateUsedtime(Time.time);
-                AttachWeapon(leftHandWeaponContainer);
                 break;
             case WeaponType.DualPistol:
                 //Attach right hand
@@ -118,7 +124,7 @@ public abstract class Character : MonoBehaviour
 
                 void AttachWeapon(Transform container)
                 {
-                    instance.Init(CurrentWeaponSO);
+                    instance.Init(CurrentWeaponSO, this);
                     instance.transform.SetParent(container);
                     instance.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
                     currentWeaponInstances.Add(instance);

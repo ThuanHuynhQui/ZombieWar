@@ -537,8 +537,8 @@ MonoBehaviour:
         transform: {fileID: 0}
         weight: 0
     m_Offset: {x: 0, y: 0, z: 0}
-    m_MinLimit: -140
-    m_MaxLimit: 140
+    m_MinLimit: -90
+    m_MaxLimit: 90
     m_AimAxis: 4
     m_UpAxis: 2
     m_WorldUpType: 4
@@ -574,7 +574,7 @@ Transform:
   m_GameObject: {fileID: 5068432241328033039}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.001, y: 0, z: 0.089}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -884,8 +884,8 @@ MonoBehaviour:
     m_Offset: {x: 0, y: 0, z: 0}
     m_MinLimit: -90
     m_MaxLimit: 90
-    m_AimAxis: 1
-    m_UpAxis: 4
+    m_AimAxis: 2
+    m_UpAxis: 1
     m_WorldUpType: 0
     m_WorldUpObject: {fileID: 0}
     m_WorldUpAxis: 2
@@ -1403,7 +1403,7 @@ MonoBehaviour:
   initialHealth: 0
   leftHandWeaponContainer: {fileID: 3197029802871550795}
   rightHandWeaponContainer: {fileID: 7750347981058149994}
-  defaultWeaponSO: {fileID: 11400000, guid: d40fc8a57a0294049825168f1fe7eb57, type: 2}
+  currentWeaponSOVariable: {fileID: 11400000, guid: baed0509144b58c4484547e11cef667f, type: 2}
   animator: {fileID: 3014980321939750070}
   rigs:
   - {fileID: 8627120794126229652}

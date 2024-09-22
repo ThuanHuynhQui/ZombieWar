@@ -592,10 +592,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2786bac62c08b104d86adcd62da9825a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialHealth: 30
+  initialHealth: 100
   leftHandWeaponContainer: {fileID: 4759593505154244571}
   rightHandWeaponContainer: {fileID: 4156962241912044695}
-  defaultWeaponSO: {fileID: 0}
+  currentWeaponSOVariable: {fileID: 0}
   animator: {fileID: 2890035204335283045}
 --- !u!195 &3473610085446324340
 NavMeshAgent:

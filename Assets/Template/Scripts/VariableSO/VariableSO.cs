@@ -7,15 +7,15 @@ public class VariableSO<T> : ScriptableObject
 {
     public event Action<ValueDataChanged<T>> onValueChanged;
 
-    [SerializeField] protected T m_RuntimeValue;
+    [SerializeField] protected T runtimeValue;
     public virtual T Value
     {
-        get => m_RuntimeValue;
+        get => runtimeValue;
         set
         {
-            var oldValue = m_RuntimeValue;
-            m_RuntimeValue = value;
-            if (!IsEquals(oldValue, m_RuntimeValue))
+            var oldValue = runtimeValue;
+            runtimeValue = value;
+            if (!IsEquals(oldValue, runtimeValue))
                 onValueChanged?.Invoke(new ValueDataChanged<T>(oldValue, value));
         }
     }

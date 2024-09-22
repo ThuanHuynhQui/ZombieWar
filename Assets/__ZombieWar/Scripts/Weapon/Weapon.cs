@@ -13,8 +13,8 @@ public class Weapon : MonoBehaviour
     #region Variables
     protected float lastUsedTime;
     protected WeaponSO weaponSO;
+    protected Character holder;
     ObjectPooling<Projectile> projectilePooling;
-    // ObjectPooling<ParticleSystem> hitParticlePooling;
     #endregion
 
     #region Properties
@@ -25,15 +25,6 @@ public class Weapon : MonoBehaviour
     protected Projectile projectilePrefab => WeaponSO ? WeaponSO.ProjectilePrefab : null;
     protected ParticleSystem hitParticlePrefab => WeaponSO ? WeaponSO.HitParticlePrefab : null;
     public bool IsAttackable => lastUsedTime + fireRate <= Time.time;
-
-    // protected ObjectPooling<ParticleSystem> HitParticlePooling
-    // {
-    //     get
-    //     {
-    //         if (hitParticlePooling == null) InitHitParticlePooling();
-    //         return hitParticlePooling;
-    //     }
-    // }
 
     protected ObjectPooling<Projectile> ProjectilePooling
     {
@@ -87,49 +78,11 @@ public class Weapon : MonoBehaviour
         }
     }
 
-    // void InitHitParticlePooling()
-    // {
-    //     if (hitParticlePrefab == null) return;
-    //     hitParticlePooling = new ObjectPooling<ParticleSystem>(
-    //                     instantiateMethod: InstantiateMethod,
-    //                     destroyMethod: DestroyMethod,
-    //                     resetMethod: ResetMethod,
-    //                     preAddToPool: PreAddToPool,
-    //                     preLeavePool: PreLeavePool
-    //                 )
-    //     {
-    //         PregenerateOffset = 5
-    //     };
-
-    //     ParticleSystem InstantiateMethod()
-    //     {
-    //         ParticleSystem instance = Instantiate(hitParticlePrefab, transform);
-    //         return instance;
-    //     }
-    //     void DestroyMethod(ParticleSystem ps)
-    //     {
-    //         Destroy(ps.gameObject);
-    //     }
-    //     void ResetMethod(ParticleSystem ps)
-    //     {
-    //         ps.Clear();
-    //     }
-    //     void PreAddToPool(ParticleSystem ps)
-    //     {
-    //         ps.Stop();
-    //         ps.transform.parent = transform;
-    //     }
-    //     void PreLeavePool(ParticleSystem ps)
-    //     {
-
-    //     }
-    // }
-
     protected void AddProjectileToPool(Projectile projectile)
     {
         if (projectilePooling == null)
         {
-            Debug.LogWarning("Objectpool is null, destroy projectile instead!");
+            // Objectpool is null, destroy projectile instead!
             Destroy(projectile.gameObject);
             return;
         }
@@ -164,13 +117,15 @@ public class Weapon : MonoBehaviour
     /// <summary>
     /// Attack at specific direction
     /// </summary>
-    /// <param name="direction">: Attack direction</param>
-    public virtual void Attack(Vector3 direction)
+    /// <param name="target">: Attack direction</param>
+    public virtual void Attack(Vector3 target)
     {
         Projectile projectile = GetProjectile();
         if (projectile == null) return;
         projectile.gameObject.SetActive(true);
         projectile.transform.SetPositionAndRotation(launchPosition.position, launchPosition.rotation);
+        target.y = launchPosition.position.y;
+        var direction = target - launchPosition.position;
         projectile.Launch(direction, projectileSpeed);
         audioSource.PlayOneShot(audioSource.clip);
         OnWeaponUsed?.Invoke();
@@ -188,8 +143,19 @@ public class Weapon : MonoBehaviour
     {
         lastUsedTime = value;
     }
-    public void Init(WeaponSO weaponSO)
+    public void Init(WeaponSO weaponSO, Character holder)
     {
         this.weaponSO = weaponSO;
+        this.holder = holder;
+    }
+
+    private void OnDestroy()
+    {
+        //Dispose object pooling if destroyed
+        if (projectilePooling != null)
+        {
+            projectilePooling.DestroyPool();
+            projectilePooling = null;
+        }
     }
 }

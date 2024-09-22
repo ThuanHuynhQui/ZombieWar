@@ -13,6 +13,7 @@ public class WeaponSO : ScriptableObject
     [SerializeField] protected WeaponType weaponType;
     [Space]
     [Header("References")]
+    [SerializeField] protected Sprite weaponIcon;
     [SerializeField] protected Weapon weaponPrefab;
     [SerializeField] protected Projectile projectilePrefab;
     [SerializeField] protected ParticleSystem hitParticlePrefab;
@@ -22,6 +23,7 @@ public class WeaponSO : ScriptableObject
     public float FireRate => fireRate;
     public float WeaponRange => weaponRange;
     public WeaponType WeaponType => weaponType;
+    public Sprite WeaponIcon => weaponIcon;
     public Weapon WeaponPrefab => weaponPrefab;
     public Projectile ProjectilePrefab => projectilePrefab;
     public ParticleSystem HitParticlePrefab => hitParticlePrefab;
