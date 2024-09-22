@@ -35,9 +35,17 @@ public abstract class Character : MonoBehaviour
     [SerializeField] protected Transform rightHandWeaponContainer;
     [SerializeField] protected WeaponSOVariable currentWeaponSOVariable;
     [SerializeField] protected Animator animator;
+    [SerializeField] protected RagdollController ragdollController;
 
     protected virtual CharacterType characterType => CharacterType.Human;
-    protected virtual float CurrentHealth { get; set; }
+    protected virtual float CurrentHealth
+    {
+        get => 0;
+        set
+        {
+            OnHealthChanged?.Invoke(CurrentHealth);
+        }
+    }
     public virtual Character CurrentTarget => null;
     protected WeaponSO currentWeaponSO;
     public virtual WeaponSO CurrentWeaponSO
@@ -56,10 +64,12 @@ public abstract class Character : MonoBehaviour
     protected List<Weapon> currentWeaponInstances = new();
     protected int usingWeaponIndex = 0;
 
-    bool isDeath = false;
+    protected bool isDeath = false;
 
     public bool IsDeath => isDeath;
     public Animator Animator => animator;
+
+    protected HitData recentHitData;
 
     protected virtual void Start()
     {
@@ -67,18 +77,36 @@ public abstract class Character : MonoBehaviour
         CurrentHealth = initialHealth;
     }
 
-    public virtual void Hit(float damage)
+    public virtual void Hit(float damage, HitData hitData)
     {
         OnHealthChanged?.Invoke(CurrentHealth);
         GameEventHandler.Invoke(CharacterEventCode.OnCharacterHit, this);
+    }
+
+    protected void SetRecentHitData(HitData recentHitData)
+    {
+        this.recentHitData = recentHitData;
     }
 
     public virtual void Die()
     {
         if (isDeath) return;
         isDeath = true;
-        OnDeath?.Invoke();
-        GameEventHandler.Invoke(CharacterEventCode.OnCharacterDie, this);
+        GetComponent<CharacterMovement>().enabled = false;
+        Animator.enabled = false;
+        GetComponent<Rigidbody>().isKinematic = true;
+        GetComponent<Collider>().enabled = false;
+        ragdollController.enabled = true;
+        var forceDir = recentHitData.forcePosition - new Vector3(transform.position.x, recentHitData.forcePosition.y, transform.position.z);
+        ragdollController.AddForce(forceDir.normalized * recentHitData.forcePower, recentHitData.forcePosition, 0.2f, ForceMode.Impulse);
+        StartCoroutine(CR_InvokeEvent());
+
+        IEnumerator CR_InvokeEvent()
+        {
+            yield return new WaitForSeconds(4f);
+            OnDeath?.Invoke();
+            GameEventHandler.Invoke(CharacterEventCode.OnCharacterDie, this);
+        }
     }
 
     protected virtual void SwitchWeapon()
@@ -94,15 +122,9 @@ public abstract class Character : MonoBehaviour
         //Attach new weapon
         switch (CurrentWeaponSO.WeaponType)
         {
-            case WeaponType.Rifle:
-            case WeaponType.Pistol:
-                Weapon instance = Instantiate(CurrentWeaponSO.WeaponPrefab);
-                instance.OnWeaponUsed += () => instance.UpdateUsedtime(Time.time);
-                AttachWeapon(rightHandWeaponContainer);
-                break;
             case WeaponType.DualPistol:
                 //Attach right hand
-                instance = Instantiate(CurrentWeaponSO.WeaponPrefab);
+                Weapon instance = Instantiate(CurrentWeaponSO.WeaponPrefab);
                 AttachWeapon(rightHandWeaponContainer);
                 Weapon leftWeapon = instance;
                 //Attach left hand
@@ -121,6 +143,12 @@ public abstract class Character : MonoBehaviour
                     leftWeapon.UpdateUsedtime(Time.time);
                 };
                 break;
+            default:
+                instance = Instantiate(CurrentWeaponSO.WeaponPrefab);
+                instance.OnWeaponUsed += () => instance.UpdateUsedtime(Time.time);
+                AttachWeapon(rightHandWeaponContainer);
+                break;
+
 
                 void AttachWeapon(Transform container)
                 {
@@ -132,4 +160,11 @@ public abstract class Character : MonoBehaviour
         }
         usingWeaponIndex = 0;
     }
+}
+
+//Store data character got hit.
+public class HitData
+{
+    public float forcePower;
+    public Vector3 forcePosition;
 }

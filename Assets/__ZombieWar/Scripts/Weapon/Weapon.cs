@@ -22,9 +22,10 @@ public class Weapon : MonoBehaviour
     protected float weaponDamage => WeaponSO ? WeaponSO.WeaponDamage : 1;
     protected float projectileSpeed => WeaponSO ? WeaponSO.ProjectileSpeed : 50;
     protected float fireRate => WeaponSO ? WeaponSO.FireRate : 1;
+    protected float weaponForce => WeaponSO ? WeaponSO.WeaponForce : 1;
     protected Projectile projectilePrefab => WeaponSO ? WeaponSO.ProjectilePrefab : null;
     protected ParticleSystem hitParticlePrefab => WeaponSO ? WeaponSO.HitParticlePrefab : null;
-    public bool IsAttackable => lastUsedTime + fireRate <= Time.time;
+    public virtual bool IsAttackable => lastUsedTime + fireRate <= Time.time;
 
     protected ObjectPooling<Projectile> ProjectilePooling
     {
@@ -90,7 +91,7 @@ public class Weapon : MonoBehaviour
         projectilePooling.Add(projectile);
     }
 
-    protected void ProjectileCollide(Collision other)
+    protected virtual void ProjectileCollide(Collision other)
     {
         if (other.rigidbody == null) //Collide with obstacle
         {
@@ -98,7 +99,11 @@ public class Weapon : MonoBehaviour
         }
         else if (other.rigidbody.TryGetComponent(out Character character))
         {
-            character.Hit(weaponDamage);
+            character.Hit(weaponDamage, new HitData()
+            {
+                forcePosition = other.GetContact(0).point,
+                forcePower = weaponForce
+            });
         }
 
         //Spawn hit particle at contact point
@@ -143,13 +148,13 @@ public class Weapon : MonoBehaviour
     {
         lastUsedTime = value;
     }
-    public void Init(WeaponSO weaponSO, Character holder)
+    public virtual void Init(WeaponSO weaponSO, Character holder)
     {
         this.weaponSO = weaponSO;
         this.holder = holder;
     }
 
-    private void OnDestroy()
+    protected virtual void OnDestroy()
     {
         //Dispose object pooling if destroyed
         if (projectilePooling != null)

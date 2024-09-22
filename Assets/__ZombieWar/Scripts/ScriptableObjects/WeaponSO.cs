@@ -10,6 +10,7 @@ public class WeaponSO : ScriptableObject
     [SerializeField] protected float projectileSpeed;
     [SerializeField] protected float fireRate;
     [SerializeField] protected float weaponRange = 5;
+    [SerializeField] protected float weaponForce = 10;
     [SerializeField] protected WeaponType weaponType;
     [Space]
     [Header("References")]
@@ -22,6 +23,7 @@ public class WeaponSO : ScriptableObject
     public float ProjectileSpeed => projectileSpeed;
     public float FireRate => fireRate;
     public float WeaponRange => weaponRange;
+    public float WeaponForce => weaponForce;
     public WeaponType WeaponType => weaponType;
     public Sprite WeaponIcon => weaponIcon;
     public Weapon WeaponPrefab => weaponPrefab;
@@ -33,5 +35,6 @@ public enum WeaponType
 {
     Rifle = 0,
     Pistol = 1,
-    DualPistol = 2
+    DualPistol = 2,
+    Grenade = 3,
 }

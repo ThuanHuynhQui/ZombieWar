@@ -5,20 +5,21 @@ using UnityEngine;
 public class ZombieCharacter : Character
 {
     float currentHealth = 0;
-
+    protected override CharacterType characterType => CharacterType.Zombie;
     protected override float CurrentHealth
     {
         get => currentHealth;
         set
         {
             currentHealth = Mathf.Max(value, 0);
+            base.CurrentHealth = value;
             if (currentHealth <= 0) Die();
         }
     }
 
     protected override void Start()
     {
-        base.Start();
+        // base.Start();
     }
 
     private void OnEnable()
@@ -28,18 +29,19 @@ public class ZombieCharacter : Character
 
     public void ResetToOrgState()
     {
-        currentHealth = initialHealth;
+        CurrentHealth = initialHealth;
+        Animator.enabled = true;
+        GetComponent<Rigidbody>().isKinematic = false;
+        GetComponent<CharacterMovement>().enabled = true;
+        GetComponent<Collider>().enabled = true;
+        ragdollController.enabled = false;
+        isDeath = false;
     }
 
-    public override void Hit(float damage)
+    public override void Hit(float damage, HitData hitData)
     {
+        SetRecentHitData(hitData);
         CurrentHealth -= damage;
-        base.Hit(damage);
-    }
-
-    public override void Die()
-    {
-        base.Die();
-        gameObject.SetActive(false);
+        base.Hit(damage, hitData);
     }
 }

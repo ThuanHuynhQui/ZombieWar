@@ -24,6 +24,7 @@ public class PlayerCharacter : Character
         {
             if (!playerHealthSO) return;
             playerHealthSO.Value = Mathf.Max(value, 0);
+            base.CurrentHealth = value;
             if (playerHealthSO.Value <= 0) Die();
         }
     }
@@ -141,10 +142,11 @@ public class PlayerCharacter : Character
         }
     }
 
-    public override void Hit(float damage)
+    public override void Hit(float damage, HitData hitData)
     {
+        SetRecentHitData(hitData);
         CurrentHealth -= damage;
-        base.Hit(damage);
+        base.Hit(damage, hitData);
     }
 
     protected override void SwitchWeapon()

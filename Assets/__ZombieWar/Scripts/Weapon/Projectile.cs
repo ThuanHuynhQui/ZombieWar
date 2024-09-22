@@ -7,8 +7,8 @@ public class Projectile : MonoBehaviour
 {
     protected Action<Projectile> ReturnMethod = delegate { };
     protected Action<Collision> OnCollide = delegate { };
-    [SerializeField] Rigidbody rb;
-    [SerializeField] Collider cld;
+    [SerializeField] protected Rigidbody rb;
+    [SerializeField] protected Collider cld;
     protected bool launching;
     protected Vector3 direction;
     protected float speed;
@@ -59,7 +59,7 @@ public class Projectile : MonoBehaviour
 
     }
 
-    private void OnCollisionEnter(Collision other)
+    protected virtual void OnCollisionEnter(Collision other)
     {
         gameObject.SetActive(false);
         cld.enabled = false;

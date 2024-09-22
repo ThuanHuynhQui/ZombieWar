@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a3aeecb7e7f55947b1748afd51cba5d, type: 3}
+  m_Name: GrenadeSO
+  m_EditorClassIdentifier: 
+  weaponDamage: 12
+  projectileSpeed: 20
+  fireRate: 0
+  weaponRange: 10
+  weaponForce: 100
+  weaponType: 3
+  weaponIcon: {fileID: 21300000, guid: ecac603a3a65bc34ca975050a31c9d42, type: 3}
+  weaponPrefab: {fileID: 8679004765215935476, guid: 8909c7cba30849840b18dbfea595cdfb, type: 3}
+  projectilePrefab: {fileID: 5842131546867452562, guid: 7cc5ae462f07e5547b696146bdda419c, type: 3}
+  hitParticlePrefab: {fileID: 19848870, guid: a7c694f0877ea874fa57e033221095c3, type: 3}
