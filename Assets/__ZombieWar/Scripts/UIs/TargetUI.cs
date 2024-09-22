@@ -19,6 +19,6 @@ public class TargetUI : MonoBehaviour
 
     private void HandleKillAmountChanged(LevelController.KillAmountChangedEventData data)
     {
-        remainingAmountTxt.text = (Mathf.Max(data.TotalAmount - data.CurrentAmount, 0)).ToString();
+        remainingAmountTxt.text = "x" + Mathf.Max(data.TotalAmount - data.CurrentAmount, 0).ToString();
     }
 }

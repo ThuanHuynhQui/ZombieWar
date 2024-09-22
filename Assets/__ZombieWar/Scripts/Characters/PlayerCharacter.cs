@@ -185,6 +185,12 @@ public class PlayerCharacter : Character
         CurrentWeaponSO = weaponSO;
     }
 
+    public override void Die()
+    {
+        base.Die();
+        GetComponent<Rigidbody>().isKinematic = true;
+    }
+
 
 #if UNITY_EDITOR
     private void OnDrawGizmosSelected()
