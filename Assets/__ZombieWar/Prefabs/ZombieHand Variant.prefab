@@ -1,0 +1,100 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &4221853214703065800
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3376731208779812771, guid: 992e2c31e0095e740b6737a3e577e5b8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3376731208779812771, guid: 992e2c31e0095e740b6737a3e577e5b8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3376731208779812771, guid: 992e2c31e0095e740b6737a3e577e5b8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3376731208779812771, guid: 992e2c31e0095e740b6737a3e577e5b8, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3376731208779812771, guid: 992e2c31e0095e740b6737a3e577e5b8, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3376731208779812771, guid: 992e2c31e0095e740b6737a3e577e5b8, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3376731208779812771, guid: 992e2c31e0095e740b6737a3e577e5b8, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3376731208779812771, guid: 992e2c31e0095e740b6737a3e577e5b8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3376731208779812771, guid: 992e2c31e0095e740b6737a3e577e5b8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3376731208779812771, guid: 992e2c31e0095e740b6737a3e577e5b8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5604967255548553488, guid: 992e2c31e0095e740b6737a3e577e5b8, type: 3}
+      propertyPath: m_Name
+      value: ZombieHand Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 8068880385226274375, guid: 992e2c31e0095e740b6737a3e577e5b8, type: 3}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 9a57ad035c0ec8444b95abb0df879b8a, type: 3}
+    m_RemovedComponents:
+    - {fileID: 4812147328359705951, guid: 992e2c31e0095e740b6737a3e577e5b8, type: 3}
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5604967255548553488, guid: 992e2c31e0095e740b6737a3e577e5b8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1456568486324500295}
+  m_SourcePrefab: {fileID: 100100000, guid: 992e2c31e0095e740b6737a3e577e5b8, type: 3}
+--- !u!4 &3843869474913988337 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1139168583704687673, guid: 992e2c31e0095e740b6737a3e577e5b8, type: 3}
+  m_PrefabInstance: {fileID: 4221853214703065800}
+  m_PrefabAsset: {fileID: 0}
+--- !u!82 &6155684931792071823 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 8068880385226274375, guid: 992e2c31e0095e740b6737a3e577e5b8, type: 3}
+  m_PrefabInstance: {fileID: 4221853214703065800}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8601823768544637912 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5604967255548553488, guid: 992e2c31e0095e740b6737a3e577e5b8, type: 3}
+  m_PrefabInstance: {fileID: 4221853214703065800}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1456568486324500295
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8601823768544637912}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a88ae27ca875f341aa073ba5c1281de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  launchPosition: {fileID: 3843869474913988337}
+  audioSource: {fileID: 6155684931792071823}
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  attackRadius: 1

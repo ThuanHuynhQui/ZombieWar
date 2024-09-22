@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ZombieCharacter : Character
 {
+    [SerializeField] LayerMask playerLayer;
     float currentHealth = 0;
     protected override CharacterType characterType => CharacterType.Zombie;
     protected override float CurrentHealth
@@ -17,9 +18,33 @@ public class ZombieCharacter : Character
         }
     }
 
-    protected override void Start()
+    protected float weaponRange => CurrentWeaponSO ? CurrentWeaponSO.WeaponRange : 0;
+
+    private void Update()
     {
-        // base.Start();
+        if (isDeath) return;
+        if (!IsEnoughRange()) return;
+        AttackPlayer();
+    }
+
+    void AttackPlayer()
+    {
+        if (currentWeaponInstances.Count == 0) return;
+        var weapon = currentWeaponInstances[usingWeaponIndex % currentWeaponInstances.Count];
+        if (weapon.IsAttackable)
+        {
+            weapon.Attack();
+        }
+    }
+
+    bool IsEnoughRange()
+    {
+        Ray ray = new(transform.position, transform.forward);
+        if (Physics.Raycast(ray, weaponRange, playerLayer))
+        {
+            return true;
+        }
+        return false;
     }
 
     private void OnEnable()

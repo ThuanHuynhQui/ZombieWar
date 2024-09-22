@@ -152,6 +152,10 @@ PrefabInstance:
       value: Grenade
       objectReference: {fileID: 0}
     - target: {fileID: 8068880385226274375, guid: 992e2c31e0095e740b6737a3e577e5b8, type: 3}
+      propertyPath: m_Volume
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8068880385226274375, guid: 992e2c31e0095e740b6737a3e577e5b8, type: 3}
       propertyPath: m_audioClip
       value: 
       objectReference: {fileID: 8300000, guid: 7c58417dbfb200a4a9f117a198465248, type: 3}

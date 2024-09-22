@@ -21,6 +21,7 @@ public class ZombieController : MonoBehaviour
     {
         UpdateDestination();
         UpdateDirection();
+        UpdateNavMeshAgent();
     }
 
     void UpdateDestination()
@@ -32,6 +33,12 @@ public class ZombieController : MonoBehaviour
     void UpdateDirection()
     {
         if (!characterMovement) return;
+        if (characterMovement.IsStop) return;
         characterMovement.MoveDirection = navMeshAgent.desiredVelocity;
+    }
+
+    void UpdateNavMeshAgent()
+    {
+        navMeshAgent.isStopped = characterMovement.IsStop;
     }
 }

@@ -81,7 +81,7 @@ public class Weapon : MonoBehaviour
 
     protected void AddProjectileToPool(Projectile projectile)
     {
-        if (projectilePooling == null)
+        if (!gameObject || projectilePooling == null)
         {
             // Objectpool is null, destroy projectile instead!
             Destroy(projectile.gameObject);
@@ -102,7 +102,8 @@ public class Weapon : MonoBehaviour
             character.Hit(weaponDamage, new HitData()
             {
                 forcePosition = other.GetContact(0).point,
-                forcePower = weaponForce
+                forcePower = weaponForce,
+                forceNormal = other.GetContact(0).normal
             });
         }
 
@@ -117,6 +118,11 @@ public class Weapon : MonoBehaviour
     protected virtual Projectile GetProjectile()
     {
         return ProjectilePooling?.Get();
+    }
+
+    public virtual T GetProjectile<T>() where T : Projectile
+    {
+        return ProjectilePooling?.Get().Cast<T>();
     }
 
     /// <summary>

@@ -35,7 +35,9 @@ public abstract class Character : MonoBehaviour
     [SerializeField] protected Transform rightHandWeaponContainer;
     [SerializeField] protected WeaponSOVariable currentWeaponSOVariable;
     [SerializeField] protected Animator animator;
+    [SerializeField] protected CharacterMovement characterMovement;
     [SerializeField] protected RagdollController ragdollController;
+    [SerializeField] protected ParticleSystem hitParticlePrefab;
 
     protected virtual CharacterType characterType => CharacterType.Human;
     protected virtual float CurrentHealth
@@ -68,6 +70,7 @@ public abstract class Character : MonoBehaviour
 
     public bool IsDeath => isDeath;
     public Animator Animator => animator;
+    public CharacterMovement CharacterMovement => characterMovement;
 
     protected HitData recentHitData;
 
@@ -81,6 +84,7 @@ public abstract class Character : MonoBehaviour
     {
         OnHealthChanged?.Invoke(CurrentHealth);
         GameEventHandler.Invoke(CharacterEventCode.OnCharacterHit, this);
+        ParticleSystem ps = Instantiate(hitParticlePrefab, hitData.forcePosition, Quaternion.LookRotation(hitData.forceNormal));
     }
 
     protected void SetRecentHitData(HitData recentHitData)
@@ -97,7 +101,7 @@ public abstract class Character : MonoBehaviour
         GetComponent<Rigidbody>().isKinematic = true;
         GetComponent<Collider>().enabled = false;
         ragdollController.enabled = true;
-        var forceDir = recentHitData.forcePosition - new Vector3(transform.position.x, recentHitData.forcePosition.y, transform.position.z);
+        var forceDir = new Vector3(transform.position.x, recentHitData.forcePosition.y, transform.position.z) - recentHitData.forcePosition;
         ragdollController.AddForce(forceDir.normalized * recentHitData.forcePower, recentHitData.forcePosition, 0.2f, ForceMode.Impulse);
         StartCoroutine(CR_InvokeEvent());
 
@@ -167,4 +171,5 @@ public class HitData
 {
     public float forcePower;
     public Vector3 forcePosition;
+    public Vector3 forceNormal;
 }

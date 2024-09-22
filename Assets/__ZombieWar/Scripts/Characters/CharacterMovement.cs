@@ -13,6 +13,7 @@ public class CharacterMovement : MonoBehaviour
     [HideInInspector] public Vector3 MoveDirection;
 
     public float Speed => speed;
+    public bool IsStop = false;
 
     private void Update()
     {
@@ -21,6 +22,7 @@ public class CharacterMovement : MonoBehaviour
 
     protected virtual void FixedUpdate()
     {
+        if (IsStop) return;
         RotateToMoveDirection();
         MoveForward();
     }

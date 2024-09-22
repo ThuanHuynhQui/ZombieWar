@@ -43,11 +43,13 @@ public class PlayerCharacter : Character
     // Update is called once per frame
     private void Update()
     {
+        if (isDeath) return;
         AttackTarget();
     }
 
     void FixedUpdate()
     {
+        if (isDeath) return;
         DetectTargetInRange();
         AimingAtTarget();
     }
@@ -147,6 +149,7 @@ public class PlayerCharacter : Character
         SetRecentHitData(hitData);
         CurrentHealth -= damage;
         base.Hit(damage, hitData);
+        Debug.Log("Player hit " + damage);
     }
 
     protected override void SwitchWeapon()

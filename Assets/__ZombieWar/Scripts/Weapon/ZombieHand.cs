@@ -2,16 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Grenade : Weapon
+public class ZombieHand : Weapon
 {
-    [SerializeField] GameObject model;
-    [SerializeField] float explodeRange;
-    [SerializeField] LayerMask explodeLayer;
+    [SerializeField] LayerMask playerLayer;
+    [SerializeField] float attackRadius;
     bool isInAnimation = false;
     AnimationEventTrigger animationEventTrigger;
-
     public override bool IsAttackable => !isInAnimation;
-    Vector3? target = null;
+
     public override void Init(WeaponSO weaponSO, Character holder)
     {
         base.Init(weaponSO, holder);
@@ -29,39 +27,34 @@ public class Grenade : Weapon
         if (data.stringParam == "Launch")
         {
             ThrowProjectile();
-            model.SetActive(false);
         }
-        else if (data.stringParam == "Attackable")
+        else if (data.stringParam == "End")
         {
             isInAnimation = false;
-            model.SetActive(true);
+            holder.CharacterMovement.IsStop = false;
         }
     }
 
     public override void Attack(Vector3 target)
     {
         holder.Animator.SetTrigger("Attack");
+        holder.CharacterMovement.IsStop = true;
         isInAnimation = true;
-        this.target = target;
     }
 
     void ThrowProjectile()
     {
-        if (target == null) return;
-        var projectile = GetProjectile();
+        var projectile = GetProjectile<ZombieAttackProjectile>();
         if (projectile)
         {
             projectile.gameObject.SetActive(true);
-            Vector3 direction = (Vector3)target;
-            projectile.Launch(direction, 0);
-            audioSource.PlayOneShot(audioSource.clip);
+            projectile.Launch(Vector3.zero, 0);
         }
-        target = null;
     }
 
     protected override void ProjectileCollide(Collision other)
     {
-        Collider[] colliders = Physics.OverlapSphere(other.GetContact(0).point, explodeRange / 2, explodeLayer);
+        Collider[] colliders = Physics.OverlapSphere(transform.position, attackRadius, playerLayer);
         if (colliders.Length > 0)
         {
             foreach (var collider in colliders)
@@ -70,16 +63,15 @@ public class Grenade : Weapon
                 {
                     character.Hit(weaponDamage, new HitData()
                     {
-                        forcePosition = other.GetContact(0).point,
+                        forcePosition = transform.position,
                         forcePower = weaponForce,
-                        forceNormal = other.GetContact(0).normal
+                        forceNormal = -transform.forward
                     });
                 }
             }
+            audioSource.PlayOneShot(audioSource.clip);
+            Instantiate(hitParticlePrefab, transform.position, Quaternion.LookRotation(-transform.forward));
         }
-
         //Spawn hit particle at contact point
-        var ps = Instantiate(hitParticlePrefab, other.GetContact(0).point, Quaternion.identity);
-        ps.transform.localScale *= explodeRange;
     }
 }

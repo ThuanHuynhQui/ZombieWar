@@ -16,6 +16,7 @@ MonoBehaviour:
   projectileSpeed: 20
   fireRate: 0.5
   weaponRange: 8
+  weaponForce: 70
   weaponType: 2
   weaponIcon: {fileID: 21300000, guid: d6c3ba0cc60f69b49b9a3d326c4a7e24, type: 3}
   weaponPrefab: {fileID: 1497203889755334951, guid: f99fd4be19a87174d8adb4b006e14c94, type: 3}
